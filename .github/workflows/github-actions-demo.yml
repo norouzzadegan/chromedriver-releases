@@ -2,7 +2,7 @@ name: Get Chrome Driver XML file and Release Compatible Version
 run-name: ${{ github.actor }} is getting chrome driver XML file and release compatible version 🚀
 on:
   schedule:
-   - cron: "* */1 * * *"
+   - cron: "0 * * * *"
   push:
 
 jobs:
