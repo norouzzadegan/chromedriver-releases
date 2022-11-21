@@ -15,7 +15,7 @@ jobs:
           sudo apt install -y libxml-xpath-perl
           mkdir release
           wget -O release/chromedriver-binary.xml https://chromedriver.storage.googleapis.com/
-          files=$(xpath -q  -e '//Contents[starts-with(Key, "LATEST_RELEASE")]/Key/text()' chromedriver-binary.xml)
+          files=$(xpath -q  -e '//Contents[starts-with(Key, "LATEST_RELEASE")]/Key/text()' release/chromedriver-binary.xml)
           files_array=($files)
           for file in ${files_array[@]}
           do
