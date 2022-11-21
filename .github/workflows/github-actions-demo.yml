@@ -33,7 +33,7 @@ jobs:
       - run: |
           set -x
           assets=()
-          for asset in ./content/*; do
+          for asset in ./release/*; do
             assets+=("-a" "$asset")
           done
           hub release create "${assets[@]}" -m latest latest
