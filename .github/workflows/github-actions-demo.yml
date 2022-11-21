@@ -1,0 +1,41 @@
+name: Get Chrome Driver XML file and Release Compatible Version
+run-name: ${{ github.actor }} is getting chrome driver XML file and release compatible version 🚀
+on:
+  schedule:
+   - cron: "* */1 * * *"
+  push:
+
+jobs:
+  Get-Chrome-Driver-XML-FILE-AND-RELASE-COMPATIBLE-VERSION:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          sudo apt install -y libxml-xpath-perl
+          mkdir release
+          wget -O release/chromedriver-binary.xml https://chromedriver.storage.googleapis.com/
+          files=$(xpath -q  -e '//Contents[starts-with(Key, "LATEST_RELEASE")]/Key/text()' chromedriver-binary.xml)
+          files_array=($files)
+          for file in ${files_array[@]}
+          do
+            wget -O release/$file https://chromedriver.storage.googleapis.com/$file
+          done
+
+      - name: Delete Release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: |
+          set -x
+          assets=()
+          for asset in ./content/*; do
+            assets+=("-a" "$asset")
+          done
+          hub release create "${assets[@]}" -m latest latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
